@@ -17,7 +17,13 @@ class Downloader
     page = open(url).read
 
     content = parsed['content']
-    p_title = page.match(/<option value=[0-9]* selected>([^<]*)/)[1].strip
+    match = page.match(/<option value=[0-9]* selected>([^<]*)/)
+    if match
+      p_title = match[1].strip
+    else
+      match = page.match(/<b class='xcontrast_txt'>(.*)<\/b>/)
+      p_title = '1. ' + match[1].strip
+    end
     w_title = ('0' * (3 - cid.to_s.length)) + p_title
     filename = File.join(out_dir, "#{w_title}.html")
 
@@ -27,7 +33,8 @@ class Downloader
   def self.download(id, out_dir)
     home_url = url(id, 1)
     home_page = open(home_url).read
-    chapters = /Chapters: ([0-9]*)/.match(home_page)[1].to_i
+    match = /Chapters: ([0-9]*)/.match(home_page)
+    chapters = match ? match[1].to_i : 1
 
     FileUtils.mkdir_p(out_dir)
 
@@ -43,7 +50,14 @@ class Downloader
     title = page.match(/<title>(.*?)<\/title>/)[1]
     author = page.match(/By:<\/span> <a class='xcontrast_txt' href='\/u\/[0-9]*\/[^']*'>([^<]*)<\/a>/)[1].strip
 
-    s_title = /(.*)Chapter/.match(title)[1].strip
+    match = /(.*)Chapter/.match(title)
+    s_title = ''
+    if match
+      s_title = match[1].strip
+    else
+      match = /(.*), a harry potter fanfic/.match(title)
+      s_title = match[1].strip
+    end
     out_name = File.join(out_dir, "#{s_title}.epub")
 
     FileUtils.mkdir_p '/tmp/epubs'
