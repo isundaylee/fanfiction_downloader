@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+
+require_relative 'downloader'
+
+unless ARGV.count == 1
+  puts 'Usage: ffdown <id>'
+  exit
+end
+
+id = ARGV[0].to_i
+out_dir = 'output'
+
+Downloader.download(id, out_dir)
+Downloader.epubify(id, out_dir)
+Downloader.cleanup(out_dir)
