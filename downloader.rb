@@ -5,6 +5,7 @@ class Downloader
   require 'gepub'
 
   require_relative 'readability_parser'
+  require_relative 'epubifier'
 
   HOME_URL = 'https://www.fanfiction.net/s/%d/%d'
 

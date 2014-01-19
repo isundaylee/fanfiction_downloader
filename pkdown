@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+require 'bundler/setup'
+
+require_relative 'portkey_downloader'
+
+unless ARGV.count == 1
+  puts 'Usage: pkdown url'
+  exit
+end
+
+url = ARGV[0]
+out_dir = 'output'
+
+PortkeyDownloader.new(url).download(out_dir)
