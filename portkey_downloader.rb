@@ -1,4 +1,3 @@
-
 require 'bundler/setup'
 
 class PortkeyDownloader
@@ -78,8 +77,10 @@ class PortkeyDownloader
 
     url = URL % [@id, chapter]
     page = Nokogiri::HTML(open(url).read)
+    content = page.to_s
+    content.encode!('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '')
 
-    return false if (/Chapter does not exist!/ =~ page.to_s)
+    return false if (/Chapter does not exist!/ =~ content)
 
     content = @@parser.parse(url)["content"]
     html = @@template.gsub('%title', retrieve_metas[:title]).gsub('%content', content)
