@@ -18,7 +18,7 @@ class Downloader
     page = open(url).read
 
     content = parsed['content']
-    match = page.match(/<option value=[0-9]* selected>([^<]*)/)
+    match = page.match(/<option *value=[0-9]* *selected>([^<]*)/)
     if match
       p_title = match[1].strip
     else
